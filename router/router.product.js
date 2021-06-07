@@ -1,4 +1,5 @@
-const express = require("express")
+const express = require("express");
+const mongoose = require("mongoose");
 const productModels = require("../model/product-models")
 const router = express.Router()
 
@@ -14,7 +15,9 @@ router.get("/", async ( req,res ) => {
 //post
 router.post("/", async ( req,res ) => {
     console.log( req.body )
+    console.log(req.user)
     const product = new productModels({
+        _id : new mongoose.Types.ObjectId(),
         title : req.body.title,
         details : req.body.details,
         imageURL : req.body.imageURL,
@@ -23,13 +26,15 @@ router.post("/", async ( req,res ) => {
         discount : req.body.discount,
         category : req.body.category,
         inStock : req.body.inStock,
-        fastDelivery : req.body.fastDelivery
+        fastDelivery : req.body.fastDelivery,
+        ratings : req.body.ratings,
+        brand : req.body.brand
     })
     try {
         const savedProduct = await product.save();
         res.json( savedProduct )
     } catch ( err ) {
-        res.json({ message : true })
+        res.json(err)
     }
 })
 router.get("/:productId", async (req,res) => {

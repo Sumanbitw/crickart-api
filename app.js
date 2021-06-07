@@ -15,9 +15,10 @@ app.use(express.urlencoded({
 const productRoute = require("./router/router.product")
 const cartRoute = require("./router/router.cart")
 const wishlistRoute = require("./router/router.wishlist")
+const userRoute = require("./router/auth")
 
 app.get("/",(req,res) => {
-    res.send("hello express")
+    res.send("Ecommerce backeend")
 })
 
 mongoose.connect(process.env.DB_CONNECTION,{useNewUrlParser:true, useUnifiedTopology:true}, () =>{
@@ -26,5 +27,6 @@ mongoose.connect(process.env.DB_CONNECTION,{useNewUrlParser:true, useUnifiedTopo
 app.use("/product", productRoute)
 app.use("/cart",cartRoute)
 app.use("/wishlist",wishlistRoute)
+app.use("/auth", userRoute)
 
 app.listen(port)
