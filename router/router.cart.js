@@ -5,7 +5,7 @@ const verify = require("./middleware/verifyToken")
 const router = express.Router()
 
 router.get("/",verify, async ( req,res ) => {
-    console.log(req.user)
+    console.log(req.userId)
     try {
         const cart = await cartModels.find();
         res.json(cart)
