@@ -24,7 +24,6 @@ router.post("/", async (req,res) => {
     const cart = new cartModels({
         _id : new mongoose.Types.ObjectId(),
         productId : req.body.productId,
-        userId : req.body.userId,
         title : req.body.title,
         details: req.body.details,
         imageURL : req.body.imageURL,
@@ -73,4 +72,16 @@ router.delete("/:cartId", async (req, res) => {
     }
     
 })
+
+router.patch('/:cartId', async (req, res) => {
+    try {
+      const updatedProduct = await Cart.updateOne({ _id: req.params.cartId }, {
+        $set: { qty: req.body.quantity }
+      })
+      res.json(updatedProduct)
+
+    } catch (err) {
+      res.status(500).json({ message : error });
+    }
+  })
 module.exports = router
