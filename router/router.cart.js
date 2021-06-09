@@ -1,11 +1,11 @@
 const express = require("express")
 const cartModels = require("../model/cart-models")
 const productModels = require("../model/product-models")
+const mongoose = require("mongoose")
 const verify = require("./middleware/verifyToken")
 const router = express.Router()
 
 router.get("/", async ( req,res ) => {
-    console.log(req.userId)
     try {
         const cart = await cartModels.find();
         res.json(cart)
@@ -16,11 +16,6 @@ router.get("/", async ( req,res ) => {
 
 router.post("/", async (req,res) => {
     const product = await productModels.findById(req.params.productId)
-    if(!product) {
-        res.status(404).json({
-            message : "There was nothing in the cart. Please add."
-        })
-    }
     const cart = new cartModels({
         _id : new mongoose.Types.ObjectId(),
         productId : req.body.productId,
