@@ -6,12 +6,20 @@ const mongoose = require("mongoose")
 require("dotenv/config")
 
 const User = require("../model/user-models");
-const { Mongoose } = require('mongoose');
+
 
 router.get("/", (req, res) => {
   res.send("lets login");
 });
 
+router.get("/signup", async (req, res) => {
+  try{
+    const user = await User.find()
+    res.status(200).json(user)
+  }catch(error){
+    res.status(404).json({ message : error })
+}
+})
 
 router.post("/signup", async (req, res) => {
   console.log(req.body)
