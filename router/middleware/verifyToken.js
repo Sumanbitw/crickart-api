@@ -3,7 +3,7 @@ require("dotenv/config")
 
 module.exports = (req, res, next) => {
     try{
-    const token = req.headers.authorization    
+    const token = req.headers("auth-token")    
     const decoded = jwt.verify(token,process.env.JWT_KEY) 
     req.useData = decoded
     next()
