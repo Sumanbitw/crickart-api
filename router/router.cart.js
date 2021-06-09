@@ -4,7 +4,7 @@ const productModels = require("../model/product-models")
 const verify = require("./middleware/verifyToken")
 const router = express.Router()
 
-router.get("/",verify, async ( req,res ) => {
+router.get("/", async ( req,res ) => {
     console.log(req.userId)
     try {
         const cart = await cartModels.find();
@@ -14,7 +14,7 @@ router.get("/",verify, async ( req,res ) => {
     }  
 })
 
-router.post("/",verify, async (req,res) => {
+router.post("/", async (req,res) => {
     const product = await productModels.findById(req.params.productId)
     if(!product) {
         res.status(404).json({
@@ -48,7 +48,7 @@ router.post("/",verify, async (req,res) => {
     }
 })
 
-router.get('/:cartId', verify, async ( req, res) => {
+router.get('/:cartId', async ( req, res) => {
     try{
         const cartItem = await cartModels.findById( req.params.cartId )
         res.status(200).json(cartItem)
@@ -59,7 +59,7 @@ router.get('/:cartId', verify, async ( req, res) => {
     }
 })
 
-router.delete("/:cartId",verify, async (req, res) => {
+router.delete("/:cartId", async (req, res) => {
     try{
         const removeItemFromCart = await cartModels.remove({ _id : req.params.cartId })
         if(!removeItemFromCart){
