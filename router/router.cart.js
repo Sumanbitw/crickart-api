@@ -16,6 +16,8 @@ router.get("/", async ( req,res ) => {
 
 router.post("/", async (req,res) => {
     const product = await productModels.findById(req.params.productId)
+    const newProduct = req.body
+    console.log(newProduct)
     const cart = new cartModels({
         _id : new mongoose.Types.ObjectId(),
         productId : req.body.productId,
@@ -37,7 +39,8 @@ router.post("/", async (req,res) => {
         res.status(201).json(savedCart)
     }catch(error){
         res.status(500).json({
-            message : error
+            message : "Failed to save cart items",
+            error : error
         })
     }
 })
@@ -48,7 +51,8 @@ router.get('/:cartId', async ( req, res) => {
         res.status(200).json(cartItem)
     }catch(error){
         res.status(500).json({
-            message : error
+            message : "Cart item not found",
+            error : error
         })
     }
 })
