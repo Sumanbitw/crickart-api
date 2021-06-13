@@ -15,7 +15,8 @@ app.use(express.urlencoded({
 const productRoute = require("./router/router.product")
 const cartRoute = require("./router/router.cart")
 const wishlistRoute = require("./router/router.wishlist")
-const userRoute = require("./router/auth")
+const signupRoute = require("./router/signup.router")
+const loginRoute = require("./router/login.router")
 
 app.get("/",(req,res) => {
     res.send("Ecommerce backeend")
@@ -25,8 +26,9 @@ mongoose.connect(process.env.DB_CONNECTION,{useNewUrlParser:true, useUnifiedTopo
     console.log("connected to db")
 })
 app.use("/product", productRoute)
-app.use("/cart",cartRoute)
-app.use("/wishlist",wishlistRoute)
-app.use("/auth", userRoute)
+app.use("/cart", cartRoute)
+app.use("/wishlist", wishlistRoute)
+app.use("/signup", signupRoute)
+app.use("/login", loginRoute)
 
 app.listen(port)
