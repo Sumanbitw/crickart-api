@@ -8,7 +8,7 @@ const router = express.Router()
 router.get("/:userId", async ( req,res ) => {
     try {
         const { userId } = req.params
-        const userCart = await cartModels.find({ user : {_id : userId } }).populate('Product');
+        const userCart = await cartModels.find({ user : {_id : userId } }).populate('Product').exec();
         res.json({ cart : userCart, success : true })
     } catch ( err ) {
         res.json({ message : err, success : false  })
