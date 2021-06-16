@@ -35,7 +35,9 @@ router.post('/:userId/:productId', async ( req, res) => {
     try{
         const updatedCart = quantity === 1 ? await cartModels.findOneAndRemove({ user : { _id : userId }, product : {_id : productId }})
         : await cartModels.findOneAndUpdate({ user : { _id : userId }, product : { _id : productId }}, { quantity })
-        res.json({ success : true, updatedCart : updatedCart, message : "Items added in cart "})
+
+        const updatedCartItem = await updatedCart.save()
+        res.json({ success : true, updatedCart : updatedCartItem, message : "Items added in cart "})
     }catch(error){
         res.status(500).json({
             message : "Cart item not found",
@@ -44,5 +46,31 @@ router.post('/:userId/:productId', async ( req, res) => {
     }
 })
 
+// router.delete("/:userId/:productId", async (req, res) => {
+//     const { userId, productId } = req.params
+//     try {
+//         const removedCartItem = await cartModels.remove({ user : userId, productId : productId })
+//         console.log(removedCartItem)
+//     }catch(error){
+//         res.json({
+//             success : false,
+//             message : "Error while removing the item from cart"
+//         })
+//     }
+// })
+
+// router.patch("/:userId/:productId", async (req, res) => {
+//     const { userId, productId } = req.params
+//     const { quantity } = req.body
+//     try {
+//         const updateCartItem = await cartModels.updateOne({ user : userId, productId : productId }, { $set : { quantity : quantity }})
+//         console.log(updateCartItem)
+//     }catch(error){
+//         res.json({
+//             success : false,
+//             message : "Error while removing the item from cart"
+//         })
+//     }
+// })
 
 module.exports = router
