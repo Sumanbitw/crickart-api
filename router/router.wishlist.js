@@ -4,62 +4,32 @@ const productModels = require("../model/product-models")
 const verify = require("./middleware/verifyToken")
 const router = express.Router()
 
-router.get("/",verify, async ( req,res ) => {
-    console.log(req.user)
+router.get("/:userId", async ( req,res ) => {
     try {
-        const wishlist = await wishlistModels.find();
-        res.json(wishlist)
+        const { userId } = req.params
+        const userWishlist = await wishlistModels.find({ user : {_id : userId } }).populate('productId').exec();
+        res.json({ cart : userWishlist, success : true })
     } catch ( error ) {
-        res.json({ message : error })
-    }  
+        res.json({ message : error, success : false  })
+    }   
 })
 
-router.post("/",verify, async (req,res) => {
-    const product = await productModels.findById(req.params.productId)
-    if(!product) {
-        res.status(404).json({
-            message : "There was nothing in the cart. Please add."
-        })
-    }
-    const wishlist = new wishlistModels({
-        _id : new mongoose.Types.ObjectId(),
-        productId : req.body.productId,
-        userId : req.body.userId,
-        title : req.body.title,
-        details: req.body.details,
-        imageURL : req.body.imageURL,
-        price : req.body.price,
-        netPrice : req.body.netPrice,
-        discount : req.body.discount,
-        category : req.body.category,
-        inStock : req.body.inStock,
-        fastDelivery : req.body.fastDelivery,
-        brand : req.body.brand,
-        ratings : req.body.ratings,
-        quantity : req.body.quantity,
-    })
+router.post("/", async (req,res) => {
     try {
-        const savedWishlist = await wishlist.save()
-        res.status(201).json(savedWishlist)
+        const newWishlist = new wishlistModels(req.body)
+        const savedWishlist = await newWishlist.save()
+        res.status(201).json({cart : savedWishlist, success:true, message : "Added in cart"})
     }catch(error){
         res.status(500).json({
-            message : error
+            success : false,
+            message : "Failed to add cart items",
+            error : error
         })
     }
 })
 
-router.get('/:wishlistId', verify, async ( req, res) => {
-    try{
-        const wishlistItem = await wishlistModels.findById( req.params.wishlistId )
-        res.status(200).json(wishlistItem)
-    }catch(error){
-        res.status(500).json({
-            message : error
-        })
-    }
-})
 
-router.delete("/:wishlistId",verify, async (req, res) => {
+router.delete("/:userId/:productId",async (req, res) => {
     try{
         const removeItemFromWishlist = await wishlistModels.remove({ _id : req.params.wishlistId })
         if(!removeItemFromWishlist){

@@ -29,21 +29,6 @@ router.post("/", async (req,res) => {
     }
 })
 
-// router.post('/:userId/:productId', async ( req, res) => {
-//     const { userId, productId } = req.params
-//     const { quantity } = req.body
-//     try{
-//         const updatedCart = quantity === 0 ? await cartModels.remove({ user : { _id : userId }, product : {_id : productId }})
-//         : await cartModels.updateOne({ user : { _id : userId }, product : { _id : productId }}, { quantity })
-//         res.json({ success : true, updatedCart : updatedCart, message : "Items added in cart "})
-//     }catch(error){
-//         res.status(500).json({
-//             message : "Cart item not found",
-//             error : error
-//         })
-//     }
-// })
-
 router.delete("/:userId/:productId", async (req, res) => {
     const { userId, productId } = req.params
     try {
