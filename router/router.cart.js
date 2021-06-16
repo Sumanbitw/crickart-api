@@ -49,6 +49,7 @@ router.delete("/:userId/:productId", async (req, res) => {
     try {
         const removedCartItem = await cartModels.remove({ user : userId, productId : productId })
         console.log(removedCartItem)
+        res.json({ success : true, message : "Items removed", removedCartItem : removedCartItem })
     }catch(error){
         res.json({
             success : false,
@@ -63,6 +64,7 @@ router.patch("/:userId/:productId", async (req, res) => {
     try {
         const updateCartItem = await cartModels.updateOne({ user : userId, productId : productId }, { $set : { quantity : quantity }})
         console.log(updateCartItem)
+        res.json({ success : true, message : "Items updated in cart", updateCartItem : updateCartItem })
     }catch(error){
         res.json({
             success : false,
