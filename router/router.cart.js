@@ -33,8 +33,7 @@ router.post('/:userId/:productId', async ( req, res) => {
     const { userId, productId } = req.params
     const { quantity } = req.body
     try{
-        const updatedCart = (quantity === 0)
-        ? await cartModels.findOneAndRemove({ user : { _id : userId }, product : {_id : productId }})
+        const updatedCart = quantity === 0 ? await cartModels.findOneAndRemove({ user : { _id : userId }, product : {_id : productId }})
         : await cartModels.findOneAndUpdate({ user : { _id : userId }, product : { _id : productId }}, { quantity })
         res.json({ success : true, updatedCart : updatedCart, message : "Items added in cart "})
     }catch(error){
