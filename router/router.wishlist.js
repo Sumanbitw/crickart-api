@@ -15,9 +15,9 @@ router.get("/:userId", async ( req,res ) => {
 })
 
 router.post("/", async (req,res) => {
+    const { userId, productId } = req.params
     try {
-        const newWishlist = new wishlistModels(req.body)
-        const savedWishlist = await newWishlist.save()
+        const savedWishlist = await wishlistModels({user : userId, product : productId }).save()
         res.status(201).json({wishlist : savedWishlist, success:true, message : "Added in wishlist"})
     }catch(error){
         res.status(500).json({
