@@ -7,8 +7,8 @@ const router = express.Router()
 router.get("/:userId", async ( req,res ) => {
     try {
         const { userId } = req.params
-        const userWishlist = await wishlistModels.find({ user : {_id : userId } }).populate('productId').exec();
-        res.json({ cart : userWishlist, success : true })
+        const userWishlist = await wishlistModels.find({ user : { _id : userId } }).populate('productId').exec();
+        res.json({ wishlist : userWishlist, success : true })
     } catch ( error ) {
         res.json({ message : error, success : false  })
     }   
@@ -18,11 +18,11 @@ router.post("/", async (req,res) => {
     try {
         const newWishlist = new wishlistModels(req.body)
         const savedWishlist = await newWishlist.save()
-        res.status(201).json({cart : savedWishlist, success:true, message : "Added in cart"})
+        res.status(201).json({wishlist : savedWishlist, success:true, message : "Added in wishlist"})
     }catch(error){
         res.status(500).json({
             success : false,
-            message : "Failed to add cart items",
+            message : "Failed to add wishlist items",
             error : error
         })
     }
