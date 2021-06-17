@@ -17,7 +17,8 @@ router.get("/:userId", async ( req,res ) => {
 router.post("/", async (req,res) => {
     const { userId, productId } = req.params
     try {
-        const savedWishlist = await wishlistModels({user : userId, product : productId }).save()
+        const newWishlist = new wishlistModels(req.body)
+        const savedWishlist = await newWishlist.save()
         res.status(201).json({wishlist : savedWishlist, success:true, message : "Added in wishlist"})
     }catch(error){
         res.status(500).json({
@@ -31,14 +32,12 @@ router.post("/", async (req,res) => {
 
 router.delete("/:userId/:productId",async (req, res) => {
     try{
-        const removeItemFromWishlist = await wishlistModels.remove({ _id : req.params.wishlistId })
-        if(!removeItemFromWishlist){
-            res.status(404).message("Item not found")
-        }
-        res.status(200).json(removeItemFromWishlist)
+        const removeItemFromWishlist = await wishlistModels.remove({user : userId, product : productId})
+        res.status(200).json({ success : true, message : "Item is removed", wishlist : removeItemFromWishlist})
     }catch(error){
         res.status(500).json({
-            message : error
+            message : error,
+            success : false
         })
     }
     
