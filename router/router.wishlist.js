@@ -30,6 +30,7 @@ router.post("/", async (req,res) => {
 
 
 router.delete("/:userId/:productId",async (req, res) => {
+    const { userId, productId } = req.params
     try{
         const removeItemFromWishlist = await wishlistModels.remove({userId : userId, productId : productId})
         res.status(200).json({ success : true, message : "Item is removed", wishlist : removeItemFromWishlist})
