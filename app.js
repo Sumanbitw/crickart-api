@@ -43,13 +43,12 @@ app.post("/payment", (req, res) => {
             amount: product.price,
             currency: "inr",
             customer: customer.id,
-            receipt_email: token.email,
           },
           { idempontencyKey }
         );
       })
-      .then(result => res.status(200).json(result))
-      .catch(err => console.log(err));
+      .then(result => res.status(200).json({result : result, message : "successfull", status : true}))
+      .catch(err => res.status(500).json({error : err, message : "Error", status : false}));
   });
   
 mongoose.connect(process.env.DB_CONNECTION,{useNewUrlParser:true, useUnifiedTopology:true}, () =>{
