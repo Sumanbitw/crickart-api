@@ -44,12 +44,6 @@ app.post("/payment", (req, res) => {
             currency: "inr",
             customer: customer.id,
             receipt_email: token.email,
-            shipping: {
-              name: token.card.name,
-              address: {
-                country: token.card.address_country
-              }
-            }
           },
           { idempontencyKey }
         );
