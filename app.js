@@ -5,7 +5,7 @@ const cors = require("cors")
 require("dotenv/config")
 
 const stripe = require("stripe")(process.env.SECRET_KEY);
-const uuid = require("uuid");
+const { v4: uuidv4 } = require("uuid");
 
 const port = process.env.PORT || 3010
 
@@ -30,7 +30,7 @@ app.post("/payment", (req, res) => {
     const { product, token } = req.body;
     console.log("PRODUCT ", product);
     console.log("PRICE ", product.price);
-    const idempontencyKey = uuid();
+    const idempontencyKey = uuidv4();
   
     return stripe.customers
       .create({
@@ -44,7 +44,6 @@ app.post("/payment", (req, res) => {
             currency: "inr",
             customer: customer.id,
             receipt_email: token.email,
-            description: `purchase of ${product.name}`,
             shipping: {
               name: token.card.name,
               address: {
