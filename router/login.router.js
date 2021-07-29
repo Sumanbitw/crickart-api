@@ -18,19 +18,19 @@ const User = require("../model/user-models")
 
   router.post('/',async (req, res, next) => {
     const user = await User.findOne({ email : req.body.email })
-    !user && res.status(401).json({ message : "Auth login failed" })
+    !user && res.json({ sucess : false, message : "Incorrect email" })
     
     const validatePassword = await bcrypt.compare(req.body.password, user.password)
-    !validatePassword && res.status(401).json({ message : "Wrong Password" })
+    !validatePassword && res.json({ success : false, message : "Wrong Password" })
     
     try{
         let token = jwt.sign({ userId : user._id, email : user.email }, 
         process.env.JWT__TOKEN, {expiresIn : "1d"})
     
         token=`Bearer ${token}`;
-        res.status(200).json({ success : true, message : "Succesfully login", user : user, token : token})
+        res.json({ success : true, message : "Succesfully login", user : user, token : token})
         }catch(error) {
-            res.status(500).json({ message : error })
+            res.json({ success :false, error : error, message : "Invalid login credentials"  })
         }
     })
     
